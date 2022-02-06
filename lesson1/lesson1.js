@@ -30,9 +30,9 @@ function showNumbers(arr) {
   }
 }
 
-if (isNaN(a) || a < 0 || isNaN(b) || b < 0) {
+if (isNaN(a) || a < 2 || isNaN(b) || b < 2) {
   console.log(
-    colors.america("Переданные аргументы не являются числом или меньше 0!")
+    colors.america("Переданные аргументы не являются числом или меньше 2!")
   );
 } else {
   while (+a <= +b) {
