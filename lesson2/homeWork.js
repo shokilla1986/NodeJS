@@ -25,10 +25,7 @@ const EventEmitter = require("events");
 const emitter = new EventEmitter();
 
 //делаем объект с запросами
-const requestTypes = [
-  { type: "timer", payload: "test timer" },
-  { type: "stop" },
-];
+const requestTypes = [{ type: "timer" }, { type: "stop" }];
 
 //создаем переменные для параметров строки
 let args = process.argv.slice(2);
