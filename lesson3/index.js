@@ -3,6 +3,7 @@ const fs = require("fs");
 const { Transform } = require("stream");
 
 const ACCESS = "./access.log";
+const TEST = "./test.log";
 
 // fs.readFile(ACCESS, "utf-8", (err, data) => {
 //   if (err) console.log(err);
@@ -88,4 +89,13 @@ const tStream = new Transform({
   },
 });
 
-readStream.pipe(tStream).pipe(process.stdout);
+const writeStream = fs.createWriteStream(TEST, {
+  flags: "a",
+  encoding: "utf-8",
+});
+
+// requests.forEach((logString) => {
+//   writeStream.write(logString + "\n");
+// });
+
+readStream.pipe(tStream).pipe(writeStream);
