@@ -56,4 +56,4 @@ function inquirerFunc() {
     });
 }
 
-inquirerFunc();
+module.exports = { inquirerFunc };
