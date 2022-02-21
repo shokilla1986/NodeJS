@@ -68,7 +68,7 @@ const inquirer = require("inquirer");
 
 //module inqurer
 const executionDir = process.cwd();
-const fileFilter = (fileOrDir) => fs.statSync(fileOrDir).isDirectory();
+const fileFilter = (fileOrDir) => fs.statSync(fileOrDir).isFile();
 const list = fs.readdirSync("./").filter(fileFilter);
 inquirer
   .prompt([
