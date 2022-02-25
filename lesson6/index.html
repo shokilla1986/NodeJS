@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket</title>
+    <script
+      src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+      integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="room"></div>
+    <input id="input" type="text" autofocus />
+    <button id="button">Send</button>
+    <div id="message"></div>
+    <script>
+      const socket = io("localhost:5555");
+
+      const usersMap = {};
+      const messageBlock = document.querySelector("#message");
+      const room = document.querySelector("#room");
+
+      const input = document.querySelector("#input");
+      const button = document.querySelector("#button");
+
+      let name = prompt("Ваше имя?");
+      socket.emit("set username", name);
+
+      button.addEventListener("click", () => {
+        const data = {
+          message: input.value,
+          name: name,
+        };
+        socket.emit("client-msg", data);
+        input.value = "";
+      });
+
+      socket.on("connect", () => {
+        console.log("Connected!", socket.id);
+        usersMap[socket.id] = {
+          id: socket.id,
+          name: name,
+        };
+        // console.log(usersMap);
+      });
+
+      socket.on("server-msg", ({ message, name }) => {
+        messageBlock.insertAdjacentHTML(
+          "afterbegin",
+          `<div>${name}:${message}</div>`
+        );
+      });
+      socket.on("NEW_CONN_EVENT", ({ message, data }) => {
+        showClients(data);
+        messageBlock.insertAdjacentHTML("afterbegin", `<div>${message}</div>`);
+      });
+      socket.on("DIS_CONN_EVENT", ({ message }) => {
+        messageBlock.insertAdjacentHTML("afterbegin", `<div>${message}</div>`);
+      });
+
+      socket.on("server-clients", (data) => {
+        let result = "";
+        room.innerHTML = "";
+        for (let key in data) {
+          result += `<li>${data[key].username}<li>`;
+          console.log(data[key].username);
+        }
+
+        room.insertAdjacentHTML("afterbegin", `<div>${result}</div>`);
+      });
+
+      const showClients = (data) => {
+        let result = "";
+        room.innerHTML = "";
+        for (let key in data) {
+          result += `<li>${data[key].username}<li>`;
+          console.log(data[key].username);
+        }
+
+        room.insertAdjacentHTML("afterbegin", `<div>${result}</div>`);
+      };
+    </script>
+  </body>
+</html>
